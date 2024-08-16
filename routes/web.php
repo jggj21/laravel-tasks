@@ -65,7 +65,7 @@ Route::get('/', function () {
             ]);
     
             try {               
-                $path = Storage::disk('azure')->putFileAs('tasklist', $file, $filename);
+                $path = Storage::disk('azure')->putFileAs('', $file, $filename);
                 $task->file_path = $path;
     
                 Log::info("File uploaded to Azure Blob Storage: ", [
