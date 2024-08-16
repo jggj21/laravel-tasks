@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /**
     * Show Task Dashboard
@@ -40,6 +41,7 @@ Route::post('/task', function (Request $request) {
     Log::info("Post /task");
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:255',
+        'file' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048'
     ]);
 
     if ($validator->fails()) {
@@ -51,6 +53,12 @@ Route::post('/task', function (Request $request) {
 
     $task = new Task;
     $task->name = $request->name;
+    if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $path = Storage::disk('azure')->putFileAs('tasklist', $file, $filename); 
+        $task->file_path = $path;
+    }
     $task->save();
     // Clear the cache
     Cache::flush();

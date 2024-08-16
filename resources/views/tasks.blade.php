@@ -13,7 +13,7 @@
                     @include('common.errors')
 
                     <!-- New Task Form -->
-                    <form action="/task" method="POST" class="form-horizontal">
+                    <form action="/task" method="POST" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
                         <!-- Task Name -->
@@ -22,6 +22,15 @@
 
                             <div class="col-sm-6">
                                 <input type="text" name="name" id="task-name" class="form-control" value="{{ old('task') }}">
+                            </div>
+                        </div>
+
+                         <!-- Task File -->
+                        <div class="form-group">
+                            <label for="task-file" class="col-sm-3 control-label">File</label>
+
+                            <div class="col-sm-6">
+                                <input type="file" name="file" id="task-file" class="form-control">
                             </div>
                         </div>
 
