@@ -37,34 +37,60 @@ Route::get('/', function () {
 /**
     * Add New Task
     */
-Route::post('/task', function (Request $request) {
-    Log::info("Post /task");
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|max:255',
-        'file' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048'
-    ]);
-
-    if ($validator->fails()) {
-        Log::error("Add task failed.");
-        return redirect('/')
-            ->withInput()
-            ->withErrors($validator);
-    }
-
-    $task = new Task;
-    $task->name = $request->name;
-    if ($request->hasFile('file')) {
-        $file = $request->file('file');
-        $filename = time().'_'.$file->getClientOriginalName();
-        $path = Storage::disk('azure')->putFileAs('tasklist', $file, $filename); 
-        $task->file_path = $path;
-    }
-    $task->save();
-    // Clear the cache
-    Cache::flush();
-
-    return redirect('/');
-});
+    Route::post('/task', function (Request $request) {
+        Log::info("Post /task");
+    
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'file' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048'
+        ]);
+    
+        if ($validator->fails()) {
+            Log::error("Add task failed. Validation errors: ", $validator->errors()->toArray());
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
+    
+        $task = new Task;
+        $task->name = $request->name;
+    
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time().'_'.$file->getClientOriginalName();
+    
+            Log::info("File received: ", [
+                'original_name' => $file->getClientOriginalName(),
+                'filename' => $filename
+            ]);
+    
+            try {               
+                $path = Storage::disk('azure')->putFileAs('tasklist', $file, $filename);
+                $task->file_path = $path;
+    
+                Log::info("File uploaded to Azure Blob Storage: ", [
+                    'path' => $path
+                ]);
+    
+            } catch (\Exception $e) {
+                Log::error("Failed to upload file to Azure Blob Storage: ", [
+                    'error' => $e->getMessage()
+                ]);
+                return redirect('/')
+                    ->withInput()
+                    ->withErrors(['file' => 'Failed to upload file to Azure Blob Storage']);
+            }
+        }
+    
+        $task->save();
+        Log::info("Task saved with file path: ", ['file_path' => $task->file_path]);
+    
+        // Clear the cache
+        Cache::flush();
+        Log::info("Cache cleared");
+    
+        return redirect('/');
+    });
 
 /**
     * Delete Task
