@@ -55,13 +55,10 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-        'azure' => [
-            'driver' => 'azure',
-            'key' => env('AZURE_STORAGE_ACCOUNT_NAME'),
-            'secret' => env('AZURE_STORAGE_KEY'),
-            'container' => env('AZURE_STORAGE_CONTAINER'),
-            'url' => env('AZURE_STORAGE_URL'),
+        'azure' => [ 
+            'driver' => 'azure-storage-blob',
             'connection_string' => env('AZURE_STORAGE_CONNECTION_STRING'),
+            'container' => env('AZURE_STORAGE_CONTAINER'),
         ],
 
     ],
