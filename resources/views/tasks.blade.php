@@ -58,13 +58,25 @@
                             <thead>
                                 <th>Task</th>
                                 <th>File</th>
+                                <th>Preview</th>
                                 <th>&nbsp;</th>
                             </thead>
                             <tbody>
                                 @foreach ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
-                                        <td class="table-text"><div>{{ $task->file_path }}</div></td>                                        
+                                        <td class="table-text"><div>{{ $task->file_path }}</div></td>  
+                                        <td class="table-text">
+                                            <div>
+                                                @if($task->file_path)
+                                                    <button type="button" class="btn btn-info btn-sm preview-file" data-file-url="{{ Storage::disk('azure')->url($task->file_path) }}">
+                                                        Preview
+                                                    </button>
+                                                @else
+                                                    No File
+                                                @endif
+                                            </div>
+                                        </td>                                      
                                         <!-- Task Delete Button -->
                                         <td>
                                             <form action="{{'/task/' . $task->id }}" method="POST">
@@ -89,6 +101,50 @@
                     Response time: {{ $elapsed * 1000 }} milliseconds.
                 </div>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="filePreviewModal" tabindex="-1" role="dialog" aria-labelledby="filePreviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="filePreviewModalLabel">File Preview</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="filePreviewContainer"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const previewButtons = document.querySelectorAll('.preview-file');
+            
+            previewButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const fileUrl = this.getAttribute('data-file-url');
+                    const fileExtension = fileUrl.split('.').pop().toLowerCase();
+                    const previewContainer = document.getElementById('filePreviewContainer');
+
+             
+                    previewContainer.innerHTML = '';
+
+                    if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {                       
+                        previewContainer.innerHTML = `<img src="${fileUrl}" class="img-fluid" alt="File Preview">`;
+                    } else if (fileExtension === 'pdf') {                     
+                        previewContainer.innerHTML = `<iframe src="${fileUrl}" style="width:100%; height:500px;" frameborder="0"></iframe>`;
+                    } else {                        
+                        previewContainer.innerHTML = `<a href="${fileUrl}" target="_blank">Download file</a>`;
+                    }
+                    $('#filePreviewModal').modal('show');
+                });
+            });
+        });
+    </script>
 @endsection
