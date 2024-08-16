@@ -57,13 +57,14 @@
                         <table class="table table-striped task-table">
                             <thead>
                                 <th>Task</th>
+                                <th>File</th>
                                 <th>&nbsp;</th>
                             </thead>
                             <tbody>
                                 @foreach ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
-
+                                        <td class="table-text"><div>{{ $task->file_path }}</div></td>                                        
                                         <!-- Task Delete Button -->
                                         <td>
                                             <form action="{{'/task/' . $task->id }}" method="POST">
