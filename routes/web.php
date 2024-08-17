@@ -92,6 +92,47 @@ Route::get('/', function () {
         return redirect('/');
     });
 
+
+    Route::put('/task/{id}', function (Request $request, $id) {
+        Log::info('Put /task/'.$id);
+    
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+        ]);
+    
+        if ($validator->fails()) {
+            Log::error("Edit task failed.");
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
+    
+        $task = Task::findOrFail($id);
+        $task->name = $request->name;
+    
+    
+        if ($request->hasFile('file')) {          
+            if ($task->file_path) {
+                $oldPath = $task->file_path;
+                $newPath = str_replace('tasklist/', '', $oldPath);
+                Storage::disk('azure')->move($oldPath, 'temporary/'.$newPath);
+                Log::info('Moved old file to temporary container', ['oldPath' => $oldPath]);
+            }            
+            $file = $request->file('file');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $path = Storage::disk('azure')->putFileAs('', $file, $filename);
+            $task->file_path = $path;
+            Log::info('New file uploaded', ['path' => $path]);
+        }
+    
+        $task->save();
+        // Clear the cache
+        Cache::flush();
+    
+        return redirect('/');
+    });
+
 /**
     * Delete Task
     */

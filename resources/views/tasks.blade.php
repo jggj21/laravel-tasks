@@ -59,6 +59,7 @@
                                 <th>Task</th>                             
                                 <th>File</th>
                                 <th>&nbsp;</th>
+                                <th>&nbsp;</th>
                             </thead>
                             <tbody>
                                 @foreach ($tasks as $task)
@@ -74,7 +75,16 @@
                                                     No File
                                                 @endif
                                             </div>
-                                        </td>                                      
+                                        </td>   
+                                        <!-- Task Edit Button -->                 
+                                        <td class="table-text">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editTaskModal" 
+                                                data-task-id="{{ $task->id }}" 
+                                                data-task-name="{{ $task->name }}" 
+                                                data-task-file="{{ $task->file_path }}">
+                                                Edit
+                                            </button>
+                                        </td>                  
                                         <!-- Task Delete Button -->
                                         <td>
                                             <form action="{{'/task/' . $task->id }}" method="POST">
@@ -97,6 +107,44 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     Response time: {{ $elapsed * 1000 }} milliseconds.
+                </div>
+            </div>
+            <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="editTaskForm" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')                            
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <input type="hidden" id="editTaskId" name="task_id">
+
+                                <div class="form-group">
+                                    <label for="task-name" class="col-form-label">Task Name:</label>
+                                    <input type="text" class="form-control" id="editTaskName" name="name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="task-file" class="col-form-label">File:</label>
+                                    <input type="file" class="form-control" id="editTaskFile" name="file">
+                                </div>
+
+                                <div id="currentFilePreview" class="mt-3">                                   
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <!-- Modal -->
@@ -144,6 +192,29 @@
                     $('#filePreviewModal').modal('show');
                 });
             });
+        });
+        $('#editTaskModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var taskId = button.data('task-id');
+            var taskName = button.data('task-name');
+            var taskFile = button.data('task-file');
+
+            var modal = $(this);
+            modal.find('#editTaskId').val(taskId);
+            modal.find('#editTaskName').val(taskName);
+
+            
+            var formAction = '/task/' + taskId;
+            modal.find('#editTaskForm').attr('action', formAction);
+
+           
+            var filePreview = modal.find('#currentFilePreview');
+            if (taskFile) {
+                var fileUrl = "{{ Storage::disk('azure')->temporaryUrl('', now()->addMinutes(5)) }}".replace('', taskFile);
+                filePreview.html('<p>Current file: <a href="' + fileUrl + '" target="_blank">Preview</a></p>');
+            } else {
+                filePreview.html('<p>No file attached.</p>');
+            }
         });
     </script>
 @endsection
