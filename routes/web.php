@@ -99,9 +99,16 @@ Route::delete('/task/{id}', function ($id) {
     Log::info('Delete /task/'.$id);
     $task = Task::findOrFail($id);
 
-    if ($task->file_path) {
-        $fileDeleted = Storage::disk('azure')->delete($task->file_path);
-        Log::info('File deleted from Azure Blob Storage: ' . ($fileDeleted ? 'Success' : 'Failed'));
+    if ($task->file_path) {       
+       $newFilePath = 'temporary/' . basename($task->file_path);
+
+       $fileCopied = Storage::disk('azure')->copy($task->file_path, $newFilePath);
+       Log::info('File copied to temporary container: ' . ($fileCopied ? 'Success' : 'Failed'));
+
+       if ($fileCopied) {          
+           $fileDeleted = Storage::disk('azure')->delete($task->file_path);
+           Log::info('Original file deleted from Azure Blob Storage: ' . ($fileDeleted ? 'Success' : 'Failed'));
+       }
     }
 
     $task->delete();
