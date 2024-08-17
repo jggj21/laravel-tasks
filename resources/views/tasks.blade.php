@@ -114,7 +114,8 @@
                     <div class="modal-content">
                         <form id="editTaskForm" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')                            
+                            @method('PUT')
+                            
                             <div class="modal-header">
                                 <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -133,9 +134,6 @@
                                 <div class="form-group">
                                     <label for="task-file" class="col-form-label">File:</label>
                                     <input type="file" class="form-control" id="editTaskFile" name="file">
-                                </div>
-
-                                <div id="currentFilePreview" class="mt-3">                                   
                                 </div>
                             </div>
 
@@ -193,28 +191,18 @@
                 });
             });
         });
+        
         $('#editTaskModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
+            var button = $(event.relatedTarget); 
             var taskId = button.data('task-id');
             var taskName = button.data('task-name');
-            var taskFile = button.data('task-file');
 
             var modal = $(this);
             modal.find('#editTaskId').val(taskId);
             modal.find('#editTaskName').val(taskName);
-
-            
+        
             var formAction = '/task/' + taskId;
             modal.find('#editTaskForm').attr('action', formAction);
-
-           
-            var filePreview = modal.find('#currentFilePreview');
-            if (taskFile) {
-                var fileUrl = "{{ Storage::disk('azure')->temporaryUrl('', now()->addMinutes(5)) }}".replace('', taskFile);
-                filePreview.html('<p>Current file: <a href="' + fileUrl + '" target="_blank">Preview</a></p>');
-            } else {
-                filePreview.html('<p>No file attached.</p>');
-            }
         });
     </script>
 @endsection
