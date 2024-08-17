@@ -69,7 +69,7 @@
                                         <td class="table-text">
                                             <div>
                                                 @if($task->file_path)
-                                                    <button type="button" class="btn btn-info btn-sm preview-file" data-file-url="{{ Storage::disk('azure')->url($task->file_path) }}">
+                                                    <button type="button" class="btn btn-info btn-sm preview-file" data-file-url="{{ Storage::disk('azure')->temporaryUrl($task->file_path, now()->addMinutes(5)) }}">
                                                         Preview
                                                     </button>
                                                 @else
