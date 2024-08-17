@@ -191,7 +191,7 @@
                 });
             });
         });
-        
+
         $('#editTaskModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); 
             var taskId = button.data('task-id');
@@ -202,6 +202,9 @@
             modal.find('#editTaskName').val(taskName);
         
             var formAction = '/task/' + taskId;
+            console.log("FORM ACTION");
+            console.log(formAction);
+            console.log(taskId);
             modal.find('#editTaskForm').attr('action', formAction);
         });
     </script>
