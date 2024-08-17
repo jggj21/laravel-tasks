@@ -69,7 +69,7 @@
                                         <td class="table-text">
                                             <div>
                                                 @if($task->file_path)
-                                                    <button type="button" class="btn btn-info btn-sm preview-file" data-file-url="{{ Storage::disk('azure')->temporaryUrl($task->file_path, now()->addMinutes(5)) }}">
+                                                    <button type="button" class="btn btn-info btn-sm preview-file" data-file="{{$task->file_path}}" data-file-url="{{ Storage::disk('azure')->temporaryUrl($task->file_path, now()->addMinutes(5)) }}">
                                                         Preview
                                                     </button>
                                                 @else
@@ -129,7 +129,8 @@
             previewButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     const fileUrl = this.getAttribute('data-file-url');
-                    const fileExtension = fileUrl.split('.').pop().toLowerCase();
+                    const fileGetExt = this.getAttribute('data-file');
+                    const fileExtension = fileGetExt.split('.').pop().toLowerCase();
                     const previewContainer = document.getElementById('filePreviewContainer');
 
              
