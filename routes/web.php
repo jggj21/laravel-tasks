@@ -97,7 +97,14 @@ Route::get('/', function () {
     */
 Route::delete('/task/{id}', function ($id) {
     Log::info('Delete /task/'.$id);
-    Task::findOrFail($id)->delete();
+    $task = Task::findOrFail($id);
+
+    if ($task->file_path) {
+        $fileDeleted = Storage::disk('azure')->delete($task->file_path);
+        Log::info('File deleted from Azure Blob Storage: ' . ($fileDeleted ? 'Success' : 'Failed'));
+    }
+
+    $task->delete();
     // Clear the cache
     Cache::flush();
 
