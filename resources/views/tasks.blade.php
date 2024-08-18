@@ -112,7 +112,7 @@
             <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <form id="editTaskForm" method="POST" enctype="multipart/form-data">
+                        <form id="editTaskForm" method="POST" enctype="multipart/form-data" action="{{ route('task.update', $task->id) }}">
                             @csrf
                             @method('PUT')
                             
@@ -190,22 +190,6 @@
                     $('#filePreviewModal').modal('show');
                 });
             });
-        });
-
-        $('#editTaskModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); 
-            var taskId = button.data('task-id');
-            var taskName = button.data('task-name');
-
-            var modal = $(this);
-            modal.find('#editTaskId').val(taskId);
-            modal.find('#editTaskName').val(taskName);
-        
-            var formAction = '/task/' + taskId;
-            console.log("FORM ACTION");
-            console.log(formAction);
-            console.log(taskId);
-            modal.find('#editTaskForm').attr('action', formAction);
-        });
+        });        
     </script>
 @endsection
