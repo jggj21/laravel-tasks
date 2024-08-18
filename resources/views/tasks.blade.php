@@ -114,7 +114,7 @@
                     <div class="modal-content">
                         <form id="editTaskForm" method="POST" enctype="multipart/form-data" action="{{ route('task.update', $task->id) }}">
                             {{ csrf_field() }}
-                            @method('PUT')
+                            @method('PATCH')
                             
                             <div class="modal-header">
                                 <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
