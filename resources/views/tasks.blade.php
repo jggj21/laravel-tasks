@@ -113,7 +113,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <form id="editTaskForm" method="POST" enctype="multipart/form-data" action="{{ route('task.update', $task->id) }}">
-                            @csrf
+                            {{ csrf_field() }}
                             @method('PUT')
                             
                             <div class="modal-header">
