@@ -112,9 +112,9 @@
             <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <form id="editTaskForm" method="POST" enctype="multipart/form-data" action="{{ route('task.update', $task->id) }}">
+                        <form id="editTaskForm" method="POST" enctype="multipart/form-data" action="/task/{{$task->id}}">
                             {{ csrf_field() }}
-                            @method('PATCH')
+                            @method('PUT')
                             
                             <div class="modal-header">
                                 <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
