@@ -131,7 +131,7 @@ Route::get('/', function () {
         Cache::flush();
     
         return redirect('/');
-    });
+    })->name('task.update');
 
 /**
     * Delete Task
