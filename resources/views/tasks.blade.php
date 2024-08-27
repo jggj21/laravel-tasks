@@ -128,7 +128,7 @@
 
                                 <div class="form-group">
                                     <label for="task-name" class="col-form-label">Task Name:</label>
-                                    <input type="text" class="form-control" id="editTaskName" name="name" required>
+                                    <input type="text" class="form-control" id="editTaskName" name="name" value="{{$task->name}}" required>
                                 </div>
 
                                 <div class="form-group">
