@@ -87,6 +87,6 @@ jobs:
           script: |
             cd /var/www/html/laravel-tasks
             sudo git pull origin main
-            sudo composer install --no-interaction --prefer-dist --optimize-autoloader
+            composer install --no-interaction --prefer-dist --optimize-autoloader
             sudo php artisan migrate --force
             sudo service nginx restart
