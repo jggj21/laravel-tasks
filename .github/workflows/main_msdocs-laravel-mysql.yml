@@ -86,7 +86,7 @@ jobs:
           passphrase: ${{secrets.AZURE_VM_PASSPHRASE}}
           script: |
             cd /var/www/html/laravel-tasks
-            git pull origin main
-            composer install --no-interaction --prefer-dist --optimize-autoloader
-            php artisan migrate --force
+            sudo git pull origin main
+            sudo composer install --no-interaction --prefer-dist --optimize-autoloader
+            sudo php artisan migrate --force
             sudo service nginx restart
