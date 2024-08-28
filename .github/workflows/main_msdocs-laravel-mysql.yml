@@ -85,7 +85,7 @@ jobs:
           key: ${{secrets.AZURE_VM_PRIVATE_KEY}}
           passphrase: ${{secrets.AZURE_VM_PASSPHRASE}}
           script: |
-            cd /var/www/html
+            cd /var/www/html/laravel-tasks
             git pull origin main
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
