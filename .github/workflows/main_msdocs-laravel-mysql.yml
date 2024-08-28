@@ -64,3 +64,29 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_98853D557A8A4D9FBF891AD56A949FDC }}
+  deploy-to-vm: 
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: php-app
+      
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+      
+      - name: Deploy to Azure VM via SSH
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{secrets.AZURE_VM_HOST}}
+          username: ${{secrets.AZURE_VM_USERNAME}}
+          key: ${{secrets.AZURE_VM_PRIVATE_KEY}}
+          passphrase: ${{secrets.AZURE_VM_PASSPHRASE}}
+          script: |
+            cd /var/www/html
+            git pull origin main
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            sudo service nginx restart
