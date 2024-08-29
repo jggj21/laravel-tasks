@@ -89,4 +89,6 @@ jobs:
             sudo git pull origin main
             composer install --no-interaction --prefer-dist --optimize-autoloader
             sudo php artisan migrate --force
+            sudo php artisan config:cache
+            sudo php artisan config:clear         
             sudo service nginx restart

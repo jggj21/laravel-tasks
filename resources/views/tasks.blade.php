@@ -62,7 +62,7 @@
                                 <th>&nbsp;</th>
                             </thead>
                             <tbody>
-                                @foreach ($tasks as $task)
+                                @forelse ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>                                         
                                         <td class="table-text">
@@ -97,7 +97,11 @@
                                             </form>
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @empty
+                                    <tr>
+                                        <td colspan="4">No tasks available</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
