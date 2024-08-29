@@ -104,9 +104,9 @@ Route::get('/', function () {
     
         if ($validator->fails()) {
             Log::error("Edit task failed.");
-            /* return redirect('/')
+            return redirect('/')
                 ->withInput()
-                ->withErrors($validator); */
+                ->withErrors($validator);
         }
     
         $task = Task::findOrFail($id);

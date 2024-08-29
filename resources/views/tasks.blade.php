@@ -231,14 +231,14 @@
                 console.log(pair[0]+ ': ' + pair[1]);
             }
             $.ajax({
-                url: updateUrl,
+                url: $(this).attr('action'),
                 type: 'POST',
                 data: formData, 
                 processData: false,
                 contentType: false, 
                 success: function (response) {                  
                     $('#editTaskModal').modal('hide');                   
-                    //location.reload();
+                    location.reload();
                 },
                 error: function (xhr) {                  
                     console.error('Error:', xhr.responseText);
