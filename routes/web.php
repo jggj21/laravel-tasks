@@ -95,7 +95,8 @@ Route::get('/', function () {
 
     Route::put('/task/{id}', function (Request $request, $id) {
         Log::info('Put /task/'.$id);
-    
+        Log::info('Update Data:', $request->all());
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
