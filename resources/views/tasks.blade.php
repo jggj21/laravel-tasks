@@ -227,7 +227,7 @@
             var updateUrl = '/task/' + taskId;
             console.log(taskId);
             $.ajax({
-                url: '{{ route('task.update', ['id' => $taskId]) }}',
+                url: updateUrl,
                 type: 'PUT',
                 data: formData, 
                 processData: false,
