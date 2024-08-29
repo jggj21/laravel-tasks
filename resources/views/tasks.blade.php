@@ -173,11 +173,8 @@
     </div>    
 @endsection
 @section('custom-script')
-<script>
-     $(document).ready(function() {
-        console.log("jQuery is working!");
-     });
-        document.addEventListener('DOMContentLoaded', function () {
+<script>    
+    document.addEventListener('DOMContentLoaded', function () {
             const previewButtons = document.querySelectorAll('.preview-file');            
             previewButtons.forEach(button => {
                 button.addEventListener('click', function () {
@@ -198,23 +195,42 @@
                     }
                     $('#filePreviewModal').modal('show');
                 });
-            });
+            });           
+        });  
+        
+    $(document).ready(function() {
+        $('#editTaskModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var taskId = button.data('task-id');
+                var taskName = button.data('task-name');
+                var taskFile = button.data('task-file');    
+                console.log("EDIT MODAL");
+                console.log({taskId, taskName, taskFile});            
+                var modal = $(this);
+                modal.find('#editTaskId').val(taskId);
+                modal.find('#editTaskName').val(taskName);
+                modal.find('#editTaskForm').attr('action', '/task/' + taskId);
+        });
 
-           
-            document.getElementById('editTaskModal').addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget; 
-                var taskId = button.getAttribute('data-task-id');
-                var taskName = button.getAttribute('data-task-name');
-                var taskFile = button.getAttribute('data-task-file');
+        $('#editTaskForm').on('submit', function (event) {
+            event.preventDefault(); 
 
-                console.log("OPEN MODAL");
-                console.log({taskId, taskName, taskFile});
-                var modal = document.getElementById('editTaskModal');
-                modal.querySelector('#editTaskId').value = taskId;
-                modal.querySelector('#editTaskName').value = taskName;
-                var form = modal.querySelector('#editTaskForm');
-                form.action = '/task/' + taskId;
+            var formData = new FormData(this); 
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'PUT',
+                data: formData, 
+                processData: false,
+                contentType: false, 
+                success: function (response) {                  
+                    $('#editTaskModal').modal('hide');                   
+                    location.reload();
+                },
+                error: function (xhr) {                  
+                    console.error('Error:', xhr.responseText);
+                }
             });
-        });        
-    </script>
+        });
+     });
+</script>
 @endsection
