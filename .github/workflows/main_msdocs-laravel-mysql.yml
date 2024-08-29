@@ -89,12 +89,10 @@ jobs:
             sudo git pull origin main
             composer install --no-interaction --prefer-dist --optimize-autoloader
             sudo php artisan migrate --force
-            sudo php artisan config:cache
-            sudo php artisan config:clear
+            sudo php artisan optimize:clear
 
-            sudo chown -R www-data:www-data /var/www/html/laravel-tasks/storage
-            sudo chown -R www-data:www-data /var/www/html/laravel-tasks/bootstrap/cache
+            sudo chown -R $(whoami):www-data /var/www/html/laravel-tasks
             sudo chmod -R 775 /var/www/html/laravel-tasks/storage
             sudo chmod -R 775 /var/www/html/laravel-tasks/bootstrap/cache
-                  
+
             sudo service nginx restart
