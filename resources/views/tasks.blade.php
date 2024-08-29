@@ -208,9 +208,7 @@
                 var button = $(event.relatedTarget);
                 var taskId = button.data('task-id');
                 var taskName = button.data('task-name');
-                var taskFile = button.data('task-file');    
-                console.log("EDIT MODAL");
-                console.log({taskId, taskName, taskFile});            
+                var taskFile = button.data('task-file');                        
                 var modal = $(this);
                 modal.find('#editTaskId').val(taskId);
                 modal.find('#editTaskName').val(taskName);
@@ -219,17 +217,6 @@
 
         $('#editTaskForm').on('submit', function (event) {
             event.preventDefault(); 
-            console.log("SUBMIT UPDATE");
-            console.log(this);
-            console.log($(this).attr('action'));
-            var formData = new FormData(this); 
-            var taskId = $('#editTaskId').val();
-            var taskName = $('#editTaskId').val();
-            var updateUrl = '/task/' + taskId;
-            console.log({taskId, formData});
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ': ' + pair[1]);
-            }
             $.ajax({
                 url: $(this).attr('action'),
                 type: 'POST',
