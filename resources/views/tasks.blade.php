@@ -232,10 +232,8 @@
             }
             $.ajax({
                 url: updateUrl,
-                type: 'PUT',
-                data: {
-                    name: taskName
-                }, 
+                type: 'POST',
+                data: formData, 
                 processData: false,
                 contentType: false, 
                 success: function (response) {                  
