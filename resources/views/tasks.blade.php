@@ -224,12 +224,18 @@
             console.log($(this).attr('action'));
             var formData = new FormData(this); 
             var taskId = $('#editTaskId').val();
+            var taskName = $('#editTaskId').val();
             var updateUrl = '/task/' + taskId;
             console.log({taskId, formData});
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ': ' + pair[1]);
+            }
             $.ajax({
                 url: updateUrl,
                 type: 'PUT',
-                data: formData, 
+                data: {
+                    name: taskName
+                }, 
                 processData: false,
                 contentType: false, 
                 success: function (response) {                  
