@@ -223,8 +223,11 @@
             console.log(this);
             console.log($(this).attr('action'));
             var formData = new FormData(this); 
+            var taskId = $('#editTaskId').val();
+            var updateUrl = '/task/' + taskId;
+            console.log(taskId);
             $.ajax({
-                url: '{{ route('task.update') }}',
+                url: '{{ route('task.update', ['id' => $taskId]) }}',
                 type: 'PUT',
                 data: formData, 
                 processData: false,
