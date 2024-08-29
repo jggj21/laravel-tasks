@@ -225,7 +225,7 @@
             var formData = new FormData(this); 
             var taskId = $('#editTaskId').val();
             var updateUrl = '/task/' + taskId;
-            console.log(taskId);
+            console.log({taskId, formData});
             $.ajax({
                 url: updateUrl,
                 type: 'PUT',
