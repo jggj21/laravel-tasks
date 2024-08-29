@@ -224,14 +224,14 @@
             console.log($(this).attr('action'));
             var formData = new FormData(this); 
             $.ajax({
-                url: $(this).attr('action'),
+                url: '{{ route('task.update') }}',
                 type: 'PUT',
                 data: formData, 
                 processData: false,
                 contentType: false, 
                 success: function (response) {                  
                     $('#editTaskModal').modal('hide');                   
-                    location.reload();
+                    //location.reload();
                 },
                 error: function (xhr) {                  
                     console.error('Error:', xhr.responseText);
