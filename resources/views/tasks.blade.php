@@ -117,7 +117,7 @@
             <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <form id="editTaskForm" method="POST" enctype="multipart/form-data"  action="{{ route('task.update', ['id' => '']) }}">
+                        <form id="editTaskForm" method="POST" enctype="multipart/form-data"  action="">
                             {{ csrf_field() }}
                             @method('PUT')
                             
@@ -196,22 +196,19 @@
             });
 
            
-            const editTaskModal = document.getElementById('editTaskModal');
-            const editButtons = document.querySelectorAll('.edit-task-btn');
+            document.getElementById('editTaskModal').addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; 
+                var taskId = button.getAttribute('data-task-id');
+                var taskName = button.getAttribute('data-task-name');
+                var taskFile = button.getAttribute('data-task-file');
 
-           
-            function updateModalContent(event) {
-                const button = event.relatedTarget;
-                const taskId = button.getAttribute('data-task-id');
-                const taskName = button.getAttribute('data-task-name');
-                const taskFile = button.getAttribute('data-task-file');
-
-                const modal = editTaskModal;
+                
+                var modal = document.getElementById('editTaskModal');
                 modal.querySelector('#editTaskId').value = taskId;
-                modal.querySelector('#editTaskName').value = taskName;                
-            }
-           
-            editTaskModal.addEventListener('show.bs.modal', updateModalContent);
+                modal.querySelector('#editTaskName').value = taskName;
+                var form = modal.querySelector('#editTaskForm');
+                form.action = '/task/' + taskId;
+            });
         });        
     </script>
 @endsection
