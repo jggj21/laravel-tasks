@@ -170,8 +170,13 @@
                 </div>
             </div>
         </div>
-    </div>
-    <script>
+    </div>    
+@endsection
+@section('custom-script')
+<script>
+     $(document).ready(function() {
+        console.log("jQuery is working!");
+     });
         document.addEventListener('DOMContentLoaded', function () {
             const previewButtons = document.querySelectorAll('.preview-file');            
             previewButtons.forEach(button => {
