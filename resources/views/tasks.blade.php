@@ -219,7 +219,9 @@
 
         $('#editTaskForm').on('submit', function (event) {
             event.preventDefault(); 
-
+            console.log("SUBMIT UPDATE");
+            console.log(this);
+            console.log($(this).attr('action'));
             var formData = new FormData(this); 
             $.ajax({
                 url: $(this).attr('action'),
