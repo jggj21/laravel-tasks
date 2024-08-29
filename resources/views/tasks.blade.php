@@ -208,7 +208,7 @@
                 var button = $(event.relatedTarget);
                 var taskId = button.data('task-id');
                 var taskName = button.data('task-name');
-                var taskFile = button.data('task-file');                        
+                var taskFile = button.data('task-file');                           
                 var modal = $(this);
                 modal.find('#editTaskId').val(taskId);
                 modal.find('#editTaskName').val(taskName);
@@ -216,7 +216,8 @@
         });
 
         $('#editTaskForm').on('submit', function (event) {
-            event.preventDefault(); 
+            event.preventDefault();          
+            var formData = new FormData(this);         
             $.ajax({
                 url: $(this).attr('action'),
                 type: 'POST',
