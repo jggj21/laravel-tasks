@@ -202,7 +202,8 @@
                 var taskName = button.getAttribute('data-task-name');
                 var taskFile = button.getAttribute('data-task-file');
 
-                
+                console.log("OPEN MODAL");
+                console.log({taskId, taskName, taskFile});
                 var modal = document.getElementById('editTaskModal');
                 modal.querySelector('#editTaskId').value = taskId;
                 modal.querySelector('#editTaskName').value = taskName;
