@@ -113,10 +113,11 @@
                     Response time: {{ $elapsed * 1000 }} milliseconds.
                 </div>
             </div>
+            <!--Edit Modal-->
             <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <form id="editTaskForm" method="POST" enctype="multipart/form-data" action="/task/{{$task->id}}">
+                        <form id="editTaskForm" method="POST" enctype="multipart/form-data"  action="{{ route('task.update', ['id' => '']) }}">
                             {{ csrf_field() }}
                             @method('PUT')
                             
@@ -132,7 +133,7 @@
 
                                 <div class="form-group">
                                     <label for="task-name" class="col-form-label">Task Name:</label>
-                                    <input type="text" class="form-control" id="editTaskName" name="name" value="{{$task->name}}" required>
+                                    <input type="text" class="form-control" id="editTaskName" name="name" required>
                                 </div>
 
                                 <div class="form-group">
@@ -172,8 +173,7 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const previewButtons = document.querySelectorAll('.preview-file');
-            
+            const previewButtons = document.querySelectorAll('.preview-file');            
             previewButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     const fileUrl = this.getAttribute('data-file-url');
@@ -194,6 +194,24 @@
                     $('#filePreviewModal').modal('show');
                 });
             });
+
+           
+            const editTaskModal = document.getElementById('editTaskModal');
+            const editButtons = document.querySelectorAll('.edit-task-btn');
+
+           
+            function updateModalContent(event) {
+                const button = event.relatedTarget;
+                const taskId = button.getAttribute('data-task-id');
+                const taskName = button.getAttribute('data-task-name');
+                const taskFile = button.getAttribute('data-task-file');
+
+                const modal = editTaskModal;
+                modal.querySelector('#editTaskId').value = taskId;
+                modal.querySelector('#editTaskName').value = taskName;                
+            }
+           
+            editTaskModal.addEventListener('show.bs.modal', updateModalContent);
         });        
     </script>
 @endsection
