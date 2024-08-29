@@ -199,6 +199,11 @@
         });  
         
     $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         $('#editTaskModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var taskId = button.data('task-id');
