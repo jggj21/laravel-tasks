@@ -181,9 +181,7 @@
                     const fileUrl = this.getAttribute('data-file-url');
                     const fileGetExt = this.getAttribute('data-file');
                     const fileExtension = fileGetExt.split('.').pop().toLowerCase();
-                    const previewContainer = document.getElementById('filePreviewContainer');
-
-             
+                    const previewContainer = document.getElementById('filePreviewContainer');             
                     previewContainer.innerHTML = '';
 
                     if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {                       
